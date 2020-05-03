@@ -12,55 +12,55 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bora.model.Perfil;
-import com.bora.repository.PerfilRepository;
+import com.bora.model.Profile;
+import com.bora.repository.ProfileRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api("Perfil")
+@Api("Profile")
 @RestController
-@RequestMapping("/perfis")
-public class PerfilController {
+@RequestMapping("/profiles")
+public class ProfileController {
 
-	private final PerfilRepository repository;
+	private final ProfileRepository repository;
 	
-	PerfilController(PerfilRepository repository) {
+	ProfileController(ProfileRepository repository) {
 		this.repository = repository;
 	}
 	
 	@ApiOperation("Listar perfis")
 	@GetMapping
-	List<Perfil> getAll() {
+	List<Profile> getAll() {
 		return repository.findAll();
 	}
 
 	@PostMapping
-	Perfil create(@RequestBody Perfil perfil) {
-		return repository.save(perfil);
+	Profile create(@RequestBody Profile profile) {
+		return repository.save(profile);
 	}
 
 	@ApiOperation("Buscar perfil por ID")
 	@GetMapping("/{id}")
-	Optional<Perfil> getUserById(@PathVariable String id) {
+	Optional<Profile> getUserById(@PathVariable String id) {
 		return repository.findById(id);
 	}
 
 	@PutMapping("/{id}")
-	Perfil update(@RequestBody Perfil perfil, @PathVariable String id) {
+	Profile update(@RequestBody Profile profile, @PathVariable String id) {
 		
-		return repository.findById(id).map(newPerfil -> {
-			newPerfil.setEmail(perfil.getEmail());
-			newPerfil.setAventureiro(perfil.getAventureiro());
-			newPerfil.setDescanso(perfil.getDescanso());
-			newPerfil.setFilho(perfil.getFilho());
-			newPerfil.setNome(perfil.getNome());
-			newPerfil.setPet(perfil.getPet());
-			newPerfil.setSairAnoite(perfil.getSairAnoite());
-			newPerfil.setSolteiro(perfil.getSolteiro());
-			return repository.save(newPerfil);
+		return repository.findById(id).map(newProfile -> {
+			newProfile.setEmail(profile.getEmail());
+			newProfile.setAventureiro(profile.getAventureiro());
+			newProfile.setDescanso(profile.getDescanso());
+			newProfile.setFilho(profile.getFilho());
+			newProfile.setNome(profile.getNome());
+			newProfile.setPet(profile.getPet());
+			newProfile.setSairAnoite(profile.getSairAnoite());
+			newProfile.setSolteiro(profile.getSolteiro());
+			return repository.save(newProfile);
 		}).orElseGet(() -> {
-			return repository.save(perfil);
+			return repository.save(profile);
 		});
 	}
 

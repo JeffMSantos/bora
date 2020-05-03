@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Perfil {
+public class Profile {
 
 	@Id
 	private String email;

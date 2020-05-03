@@ -25,7 +25,7 @@ public class SwaggerConfig {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Bora_App! Perfil REST API").description("\"Service integration for perfils Bora App\"")
+		return new ApiInfoBuilder().title("Bora_App! Profile REST API").description("\"Service integration for profile Bora App\"")
 				.version("1.0.0").license("Apache License Version 2.0")
 				.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"").build();
 	}
