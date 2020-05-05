@@ -3,6 +3,7 @@ package com.bora.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bora.model.Profile;
 import com.bora.repository.ProfileRepository;
+import com.bora.service.SlackService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +24,9 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/profiles")
 public class ProfileController {
+	
+	@Autowired
+	private SlackService slackService;
 
 	private final ProfileRepository repository;
 	
@@ -37,7 +42,9 @@ public class ProfileController {
 
 	@PostMapping
 	Profile create(@RequestBody Profile profile) {
-		return repository.save(profile);
+		Profile newProfile = repository.save(profile);
+		slackService.postMessage("Novo perfil criado com o email: " + newProfile.getEmail());
+		return newProfile;
 	}
 
 	@ApiOperation("Buscar perfil por ID")
