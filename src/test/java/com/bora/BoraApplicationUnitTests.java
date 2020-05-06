@@ -11,15 +11,15 @@ import com.bora.repository.ProfileRepository;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-public class ProfileRepositoryTests {
-
+class BoraApplicationUnitTests {
+	
 	@Autowired
-	private ProfileRepository userRepository;
+	private ProfileRepository profileRepository;
 	
 	@Test
 	public void shouldCreateProfile() {
 		Profile profile = new Profile("Email teste", "Nome teste", true, true, true, false, false, false);
-		userRepository.save(profile);
+		profileRepository.save(profile);
 		Assertions.assertThat(profile.getEmail()).isNotNull();
 		Assertions.assertThat(profile.getNome()).isNotNull();
 		Assertions.assertThat(profile.getSolteiro()).isTrue();
@@ -33,7 +33,7 @@ public class ProfileRepositoryTests {
 	@Test
 	public void shouldUpdateProfile() {
 		Profile profile = new Profile("Email teste", "Nome teste", true, true, true, false, false, false);
-		userRepository.save(profile);
+		profileRepository.save(profile);
 		
 		profile.setNome("Novo nome");
 		profile.setSolteiro(false);
@@ -42,9 +42,9 @@ public class ProfileRepositoryTests {
 		profile.setFilho(false);
 		profile.setPet(false);
 		profile.setSairAnoite(true);
-		userRepository.save(profile);
+		profileRepository.save(profile);
 		
-		profile = userRepository.findById(profile.getEmail()).get();
+		profile = profileRepository.findById(profile.getEmail()).get();
 		Assertions.assertThat(profile.getNome()).isEqualTo("Novo nome");
 		Assertions.assertThat(profile.getSolteiro()).isEqualTo(false);
 		Assertions.assertThat(profile.getAventureiro()).isEqualTo(false);
@@ -57,8 +57,8 @@ public class ProfileRepositoryTests {
 	@Test
 	public void shouldDeleteProfile() {
 		Profile profile = new Profile("Email teste", "Nome teste", true, true, true, false, false, false);
-		userRepository.save(profile);
-		userRepository.delete(profile);
-		Assertions.assertThat(userRepository.findById(profile.getEmail())).isEmpty();
+		profileRepository.save(profile);
+		profileRepository.delete(profile);
+		Assertions.assertThat(profileRepository.findById(profile.getEmail())).isEmpty();
 	}
 }

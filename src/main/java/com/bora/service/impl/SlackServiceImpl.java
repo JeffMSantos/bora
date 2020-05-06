@@ -1,5 +1,6 @@
 package com.bora.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bora.service.SlackService;
@@ -11,10 +12,13 @@ import com.hubspot.slack.client.methods.params.chat.ChatPostMessageParams;
 @Service
 public class SlackServiceImpl implements SlackService {
 
+	@Value("${slack_access_token}")
+	private String token;
+	
 	@Override
 	public void postMessage(String mensagem) {
 		SlackClientRuntimeConfig runtimeConfig = SlackClientRuntimeConfig.builder()
-				.setTokenSupplier(() -> "xoxb-1116245948209-1096913554982-wfHJ9xumsbZqX3dyaZkyghC9").build();
+				.setTokenSupplier(() -> token).build();
 
 		SlackClient slackClient = SlackClientFactory.defaultFactory().build(runtimeConfig);
 
