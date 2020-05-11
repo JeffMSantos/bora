@@ -7,19 +7,19 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.bora.model.Profile;
-import com.bora.repository.ProfileRepository;
+import com.bora.service.impl.ProfileServiceImpl;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
 class BoraApplicationUnitTests {
-	
+
 	@Autowired
-	private ProfileRepository profileRepository;
-	
+	private ProfileServiceImpl profileService;
+
 	@Test
 	public void shouldCreateProfile() {
 		Profile profile = new Profile("Email teste", "Nome teste", true, true, true, false, false, false);
-		profileRepository.save(profile);
+		profileService.create(profile);
 		Assertions.assertThat(profile.getEmail()).isNotNull();
 		Assertions.assertThat(profile.getNome()).isNotNull();
 		Assertions.assertThat(profile.getSolteiro()).isTrue();
@@ -29,12 +29,12 @@ class BoraApplicationUnitTests {
 		Assertions.assertThat(profile.getDescanso()).isFalse();
 		Assertions.assertThat(profile.getAventureiro()).isFalse();
 	}
-	
+
 	@Test
 	public void shouldUpdateProfile() {
-		Profile profile = new Profile("Email teste", "Nome teste", true, true, true, false, false, false);
-		profileRepository.save(profile);
-		
+		Profile profile = new Profile("Email teste", "Antigo nome", true, true, true, false, false, false);
+		profileService.create(profile);
+
 		profile.setNome("Novo nome");
 		profile.setSolteiro(false);
 		profile.setAventureiro(false);
@@ -42,9 +42,9 @@ class BoraApplicationUnitTests {
 		profile.setFilho(false);
 		profile.setPet(false);
 		profile.setSairAnoite(true);
-		profileRepository.save(profile);
-		
-		profile = profileRepository.findById(profile.getEmail()).get();
+		profileService.update(profile, profile.getEmail());
+
+		profile = profileService.findById(profile.getEmail());
 		Assertions.assertThat(profile.getNome()).isEqualTo("Novo nome");
 		Assertions.assertThat(profile.getSolteiro()).isEqualTo(false);
 		Assertions.assertThat(profile.getAventureiro()).isEqualTo(false);
@@ -53,12 +53,12 @@ class BoraApplicationUnitTests {
 		Assertions.assertThat(profile.getPet()).isEqualTo(false);
 		Assertions.assertThat(profile.getSairAnoite()).isEqualTo(true);
 	}
-	
+
 	@Test
 	public void shouldDeleteProfile() {
 		Profile profile = new Profile("Email teste", "Nome teste", true, true, true, false, false, false);
-		profileRepository.save(profile);
-		profileRepository.delete(profile);
-		Assertions.assertThat(profileRepository.findById(profile.getEmail())).isEmpty();
+		profileService.create(profile);
+		profileService.deleteById(profile.getEmail());
+		Assertions.assertThat(profileService.findById(profile.getEmail())).isNull();
 	}
 }

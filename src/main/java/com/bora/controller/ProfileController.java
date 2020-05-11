@@ -1,9 +1,7 @@
 package com.bora.controller;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bora.model.Profile;
-import com.bora.repository.ProfileRepository;
-import com.bora.service.SlackService;
+import com.bora.service.impl.ProfileServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,56 +22,38 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/profiles")
 public class ProfileController {
 	
-	@Autowired
-	private SlackService slackService;
-
-	private final ProfileRepository repository;
+	private final ProfileServiceImpl profileService;
 	
-	ProfileController(ProfileRepository repository) {
-		this.repository = repository;
+	ProfileController(ProfileServiceImpl profileService) {
+		this.profileService = profileService;
 	}
 	
 	@ApiOperation("Listar perfis")
 	@GetMapping
-	List<Profile> getAll() {
-		return repository.findAll();
+	List<Profile> findAll() {
+		return profileService.findAll();
 	}
 
 	@PostMapping
 	Profile create(@RequestBody Profile profile) {
-		Profile newProfile = repository.save(profile);
-		slackService.postMessage("Novo perfil criado com o email: " + newProfile.getEmail());
-		return newProfile;
+		return profileService.create(profile);
 	}
 
 	@ApiOperation("Buscar perfil por ID")
 	@GetMapping("/{id}")
-	Optional<Profile> getUserById(@PathVariable String id) {
-		return repository.findById(id);
+	Profile findById(@PathVariable String id) {
+		return profileService.findById(id);
 	}
 
 	@PutMapping("/{id}")
 	Profile update(@RequestBody Profile profile, @PathVariable String id) {
-		
-		return repository.findById(id).map(newProfile -> {
-			newProfile.setEmail(profile.getEmail());
-			newProfile.setAventureiro(profile.getAventureiro());
-			newProfile.setDescanso(profile.getDescanso());
-			newProfile.setFilho(profile.getFilho());
-			newProfile.setNome(profile.getNome());
-			newProfile.setPet(profile.getPet());
-			newProfile.setSairAnoite(profile.getSairAnoite());
-			newProfile.setSolteiro(profile.getSolteiro());
-			return repository.save(newProfile);
-		}).orElseGet(() -> {
-			return repository.save(profile);
-		});
+		return profileService.update(profile, id);
 	}
 
 	@ApiOperation("Deletar perfil por ID")
 	@DeleteMapping("/{id}")
 	void deleteById(@PathVariable String id) {
-		repository.deleteById(id);
+		profileService.deleteById(id);
 	}
 }
 	
