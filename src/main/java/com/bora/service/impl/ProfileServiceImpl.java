@@ -25,7 +25,8 @@ public class ProfileServiceImpl {
 
 	public Profile create(Profile profile) {
 		Profile newProfile = repository.save(profile);
-		slackService.postMessage("Novo perfil criado com o email: " + newProfile.getEmail());
+		slackService.postMessage("Novo perfil criado com o email: " +
+		newProfile.getEmail());
 		return newProfile;
 	}
 
@@ -51,7 +52,10 @@ public class ProfileServiceImpl {
 			newProfile.setSolteiro(profile.getSolteiro());
 			return repository.save(newProfile);
 		}).orElseGet(() -> {
-			return repository.save(profile);
+			Profile newProfile = repository.save(profile);
+			slackService.postMessage("Novo perfil criado com o email: " +
+			newProfile.getEmail());
+			return newProfile;
 		});
 	}
 

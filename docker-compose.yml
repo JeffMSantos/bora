@@ -1,0 +1,21 @@
+version: "3"
+services:
+  app-spring-boot:
+    image: bora-app
+    ports:
+      - "8080:8080"
+    networks:
+      - bora-app-mysql
+    depends_on:
+      - mysqldb
+ 
+  mysqldb:
+    image: mysql:8
+    networks:
+      - bora-app-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=db_bora  
+
+networks:
+  bora-app-mysql:

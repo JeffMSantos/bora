@@ -1,5 +1,10 @@
 package com.bora;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +20,7 @@ class BoraApplicationUnitTests {
 
 	@Autowired
 	private ProfileServiceImpl profileService;
-
+	
 	@Test
 	public void shouldCreateProfile() {
 		Profile profile = new Profile("Email teste", "Nome teste", true, true, true, false, false, false);
@@ -60,5 +65,26 @@ class BoraApplicationUnitTests {
 		profileService.create(profile);
 		profileService.deleteById(profile.getEmail());
 		Assertions.assertThat(profileService.findById(profile.getEmail())).isNull();
+	}
+	
+	@Test
+	public void whenNotEmptyEmail_thenNoConstraintViolations() {
+	    Profile profile = new Profile("jeff@jeff.com", "Jeff", true, true, true, true, true, true);
+	    Set<ConstraintViolation<Profile>> violations = Validation.buildDefaultValidatorFactory().getValidator().validate(profile);
+	    Assertions.assertThat(violations.size()).isEqualTo(0);
+	}
+	     
+	@Test
+	public void whenEmptyEmail_thenOneConstraintViolation() {
+	    Profile profile = new Profile("", "Jeff", true, true, true, true, true, true);
+	    Set<ConstraintViolation<Profile>> violations = Validation.buildDefaultValidatorFactory().getValidator().validate(profile);
+	    Assertions.assertThat(violations.size()).isEqualTo(1);
+	}
+	     
+	@Test
+	public void whenNullEmail_thenOneConstraintViolation() {
+	    Profile profile = new Profile(null, "Jeff", true, true, true, true, true, true);
+	    Set<ConstraintViolation<Profile>> violations = Validation.buildDefaultValidatorFactory().getValidator().validate(profile);
+	    Assertions.assertThat(violations.size()).isEqualTo(1);
 	}
 }

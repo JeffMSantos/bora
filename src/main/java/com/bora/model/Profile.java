@@ -2,6 +2,7 @@ package com.bora.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ import lombok.Setter;
 public class Profile {
 
 	@Id
+	@NotEmpty
 	private String email;
 	private String nome;
 	private Boolean solteiro;
