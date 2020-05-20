@@ -1,21 +1,38 @@
 version: "3"
 services:
+  rabbitmq:
+    image: rabbitmq:3.8.3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - network
   mysqldb:
     image: mysql:8
     restart: always
     networks:
-      - bora-app-mysql
+      - network
     environment:
       - MYSQL_ROOT_PASSWORD=admin
       - MYSQL_DATABASE=db_bora  
+  app-spring-boot-consumer:
+    image: iddockerjms/bora-app-consumer:latest
+    ports:
+      - "8081:8081"
+    networks:
+      - network
+    restart: on-failure
+    depends_on:
+      - rabbitmq
   app-spring-boot:
     image: iddockerjms/bora-app:latest
     ports:
       - "8080:8080"
     networks:
-      - bora-app-mysql
+      - network
     restart: on-failure
     depends_on:
       - mysqldb
+      - rabbitmq
 networks:
-  bora-app-mysql:
+  network:

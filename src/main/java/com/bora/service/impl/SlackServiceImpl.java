@@ -1,6 +1,7 @@
 package com.bora.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.bora.service.SlackService;
@@ -15,6 +16,7 @@ public class SlackServiceImpl implements SlackService {
 	@Value("${slack_access_token}")
 	private String token;
 	
+	@Async
 	@Override
 	public void postMessage(String mensagem) {
 		SlackClientRuntimeConfig runtimeConfig = SlackClientRuntimeConfig.builder()
