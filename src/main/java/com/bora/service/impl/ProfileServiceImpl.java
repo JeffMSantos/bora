@@ -82,7 +82,7 @@ public class ProfileServiceImpl {
             rabbitTemplate.convertAndSend(ProfileAMQPConfig.EXCHANGE_NAME, "", json);
             logger.info("Postando mensagem na fila...");
         } catch (JsonProcessingException e) {
-           logger.error(e.getMessage());
+           logger.error("Erro envio mensagem fila", e.getMessage());
         }
     }
 }

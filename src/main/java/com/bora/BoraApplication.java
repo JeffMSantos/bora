@@ -9,5 +9,4 @@ public class BoraApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BoraApplication.class, args);
 	}
-
 }
